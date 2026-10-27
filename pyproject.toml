@@ -1,0 +1,13 @@
+[project]
+name = "clock-inside-the-ai"
+version = "0.1.0"
+description = "Do language models represent the days of the week as a circle? Demo on Sarvam-1."
+requires-python = ">=3.10"
+dependencies = ["torch", "transformers", "accelerate", "numpy", "scipy", "fastapi", "uvicorn"]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

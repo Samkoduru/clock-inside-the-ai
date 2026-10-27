@@ -1,0 +1,70 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Clock Inside the AI</title><link rel="stylesheet" href="style.css">
+<style>
+#stage{position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:0}
+#labels{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.lb{position:absolute;transform:translate(-50%,-135%);font-size:14px;font-weight:600;white-space:nowrap;text-shadow:0 0 8px #000,0 0 3px #000;transition:opacity .4s}
+main{position:relative;z-index:5;width:min(520px,92vw);margin-left:5vw;pointer-events:none}
+section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:70px 0}
+section .box{pointer-events:auto;padding:26px 28px}
+#hud{position:fixed;right:3vw;bottom:4vh;z-index:6;width:min(420px,44vw);padding:18px 20px;display:none}
+#hud canvas{width:100%;height:130px;display:block}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.bars{display:grid;grid-template-columns:auto 1fr auto;gap:6px 10px;align-items:center;font-size:13px;margin-top:10px}
+.bar{height:12px;border-radius:6px;background:rgba(255,255,255,.07);overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--en),#9b8cff);width:0;transition:width .08s}
+.badge{font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:2px 9px;border-radius:99px;border:1px solid}
+.big{font-size:34px;font-weight:700;letter-spacing:-.02em}
+.kv{display:flex;gap:26px;flex-wrap:wrap;margin:8px 0}.kv div{min-width:90px}.kv small{display:block}
+ul.l{padding-left:18px;margin:6px 0}ul.l li{margin:5px 0;color:#c4cade}
+</style></head><body>
+<nav><b>AI X-Ray</b><a class="on" href="clock.html">The Clock Inside the AI</a><a href="https://github.com/Samkoduru/watch-ai-pretend-to-think">Watch the AI Pretend to Think ↗</a></nav>
+<canvas id="stage"></canvas><div id="labels"></div>
+<div id="hud" class="glass"><div id="hudTitle" class="mut" style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px"></div><canvas id="chart" width="800" height="260"></canvas><div id="hudNote" class="mut" style="font-size:13px;margin-top:6px"></div></div>
+<main>
+<section data-step="0"><div class="box glass"><span class="tag">Demo 1 · Sarvam-1, a 2-billion-parameter Indian-language model</span>
+<h1>The Clock Inside the AI</h1>
+<p>We fed days of the week to an AI and recorded what happened inside it. Each glowing dot is one weekday, as the model sees it. Drag the scene to rotate.</p>
+<p class="mut">Scroll ↓ &nbsp;·&nbsp; Everything shown is measured from a real model running on a laptop.</p></div></section>
+
+<section data-step="1"><div class="box glass"><span class="tag">1 · The ring</span><h2>The week is already a circle inside the model.</h2>
+<p>Each dot is a weekday as the model sees it, found by reading the model's internal numbers while it processed phrases like "Today is Monday". Monday to Sunday line up in order around a ring, like the numbers on a clock face.</p>
+<p>That order is there from the very first layers: it is baked into the model's word embeddings. Shuffling the day labels almost never produces a ring this good, even after allowing the best of 28 layers (p = <span id="pEn">–</span>).</p>
+<p class="mut" style="font-size:14px">Ring score (chart): 1 means the angles follow the true weekday order perfectly.</p></div></section>
+
+<section data-step="2"><div class="box glass"><span class="tag">2 · Same clock, different language</span><h2>Hindi's weekdays swing onto the <em>same</em> ring in the middle layers.</h2>
+<p>Orange dots are the Hindi names (सोमवार, मंगलवार…). Drag the slider through the model's layers. In the first layers the Hindi names are in their own arrangement. By layer 14–16 each one sits at the same angle as its English twin.</p>
+<div style="margin:14px 0"><div class="kv"><div><small>Layer</small><span class="big" id="layerNum">20</span></div><div><small>Hindi–English alignment</small><span class="big" id="alNow">–</span></div></div>
+<input id="layer" type="range" min="2" max="28" step="1" value="20"></div>
+<p class="mut" style="font-size:14px">Alignment 1 = every Hindi day at the same angle as its English twin, up to one global rotation. Best over layers: <b id="alHi">–</b> (days), <b id="alHiM">–</b> (months).</p></div></section>
+
+<section data-step="3"><div class="box glass"><span class="tag">3 · A surprise</span><h2>Tamil weekdays don't form their own ring.</h2>
+<p>Magenta dots are the Tamil names. They show no clean circle in this model (p = <span id="pTa">–</span> after correcting for layer choice).</p>
+<p class="mut" style="font-size:14px">One untested explanation: all seven Tamil names end in the same word (கிழமை, "day"), so the final word piece carries little day information. We haven't checked, so treat it as a hypothesis.</p></div></section>
+
+<section data-step="4"><div class="box glass"><span class="tag">4 · Months too</span><h2>The twelve months make a bigger ring.</h2>
+<p>January to December form an almost perfect circle (ring score <b id="rMon">–</b>) that builds up over the first seven layers or so, and the Hindi month names (जनवरी, फ़रवरी…) sit on it too.</p></div></section>
+
+<section data-step="5"><div class="box glass"><span class="tag">5 · Is it just a trick of the maths?</span><h2>We tested with random words.</h2>
+<p>Any 7 points can look a bit circular if you pick the best layer. So we ran 30 sets of 7 random objects (table, river, ladder…) through the same test. They average <b id="rndMean">–</b>; the best reached <b id="rndMax">–</b>. The weekdays scored <b id="dayR">–</b>, and, more tellingly, almost no shuffled labelling of the weekdays does as well. Real, but the margin over the best random set is modest, so the shuffle test is the stronger evidence.</p></div></section>
+
+<section data-step="6"><div class="box glass"><span class="tag">6 · Reach in and turn the dial</span><h2>Now let's change what the model thinks "today" is.</h2>
+<p>The model reads: <i>"If today is <b id="srcName">Friday</b>, then tomorrow is ___"</i>. We replace its internal "Friday" with a point partway around the clock and see what it answers.</p>
+<div class="row" id="dayBtns"></div>
+<input id="dial" type="range" min="0" max="7" step="0.25" value="0">
+<div class="kv"><div><small>Dial position</small><span class="big" id="dialVal">0</span></div><div><small>Model answers</small><span class="big" id="ans">–</span></div><div><small>Expected</small><span class="big" id="exp">–</span></div></div>
+<div class="row"><button class="btn on" data-mode="ring">Ring path</button><button class="btn" data-mode="chord">Straight line</button><button class="btn" data-mode="scrambled">Scrambled control</button><span id="liveBadge" class="badge" style="color:var(--warn);border-color:var(--warn)">replay</span></div>
+<div class="bars" id="bars"></div>
+<p class="mut" style="font-size:13px;margin-top:12px" id="dialNote"></p></div></section>
+
+<section data-step="7"><div class="box glass"><span class="tag">7 · How much of the clock do you need?</span><h2>It takes three "gears."</h2>
+<p>A clock ring needs several interlocking cycles. Using just the basic circle (1 harmonic), moving the dial gets the model's answer right 26–31% of the time. With 2, about 60%. With all 3 it reaches 90% (layers 10–14). A random direction of the same size: 0%.</p></div></section>
+
+<section data-step="8"><div class="box glass"><span class="tag">What we don't know</span><h2>Honest limits</h2>
+<ul class="l"><li>One model (Sarvam-1, 2B), one tokenizer, and a few hundred prompts. Not yet repeated on other models.</li>
+<li>Layers were chosen after looking; the shuffle statistics correct for that, the dial results do not.</li>
+<li>The dial moves the answer, but "ring vs straight line" differs only modestly (0.69 vs 0.63 of probability on the right neighbours). The scrambled control collapses to 0.27.</li>
+<li>Tamil: no ring. We offer a possible reason, not a tested one.</li>
+<li>Names like Tuesday may span several word pieces; we use the last piece.</li></ul>
+<p class="mut" style="margin-top:12px;font-size:14px">Inspired by public work on circular and Fourier structure in language models, and Goodfire's neural-geometry research. Sarvam-1 is used under the Sarvam AI Research License (research, non-commercial).</p></div></section>
+</main>
+<script type="module" src="clock.js"></script></body></html>
