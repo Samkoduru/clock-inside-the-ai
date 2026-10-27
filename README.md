@@ -2,7 +2,9 @@
 
 **Do language models keep the days of the week on a circle?** We checked inside Sarvam-1, a 2-billion-parameter model for Indian languages. Yes: Monday to Sunday form a ring in its internal numbers, and Hindi weekday names land on the same ring as the English ones. Turning that ring with a "dial" changes what the model says the next day is.
 
-**Live demo:** run it locally (see below). Interactive page: `web/clock.html`.
+**▶ Live demo:** https://samkoduru.github.io/clock-inside-the-ai/clock.html (replay mode: the dial shows recorded runs). To drive the dial with the real model, run it locally (see below).
+
+**Companion demo:** [Watch the AI Pretend to Think](https://samkoduru.github.io/watch-ai-pretend-to-think/theater.html)
 
 ![status](https://img.shields.io/badge/model-Sarvam--1%202B-orange) ![compute](https://img.shields.io/badge/compute-laptop%20(M3%20Pro)%20%240-brightgreen) ![license](https://img.shields.io/badge/code-MIT-blue)
 
@@ -83,7 +85,7 @@ rotate_spike.py     rotation intervention vs random-plane control
 dial_spike.py       harmonic ring model and dial accuracy
 export_data.py      all corrected statistics and the dial sweep -> web/data.json
 serve.py            static server plus live /api/dial (uses Sarvam-1 on your machine)
-web/clock.html      the interactive walkthrough (scroll-driven, three.js)
+web/clock.html      the interactive walkthrough (scroll-driven, three.js), deployed by .github/workflows/pages.yml
 tests/              geometry unit tests
 ```
 
